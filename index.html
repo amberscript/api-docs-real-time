@@ -1,0 +1,695 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>AmberScript Live Transcription API</title>
+
+    <style media="screen">
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s, .highlight .sa, .highlight .dl {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf, .highlight .fm {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv, .highlight .vm {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #f92672;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <style media="print">
+      * {
+        -webkit-transition:none!important;
+        transition:none!important;
+      }
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #586e75;
+}
+.highlight .err {
+  color: #002b36;
+  background-color: #dc322f;
+}
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
+  color: #657b83;
+}
+.highlight .cp {
+  color: #b58900;
+}
+.highlight .nt {
+  color: #b58900;
+}
+.highlight .o, .highlight .ow {
+  color: #93a1a1;
+}
+.highlight .p, .highlight .pi {
+  color: #93a1a1;
+}
+.highlight .gi {
+  color: #859900;
+}
+.highlight .gd {
+  color: #dc322f;
+}
+.highlight .gh {
+  color: #268bd2;
+  background-color: #002b36;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #6c71c4;
+}
+.highlight .kc {
+  color: #cb4b16;
+}
+.highlight .kt {
+  color: #cb4b16;
+}
+.highlight .kd {
+  color: #cb4b16;
+}
+.highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #859900;
+}
+.highlight .sr {
+  color: #2aa198;
+}
+.highlight .si {
+  color: #d33682;
+}
+.highlight .se {
+  color: #d33682;
+}
+.highlight .nn {
+  color: #b58900;
+}
+.highlight .nc {
+  color: #b58900;
+}
+.highlight .no {
+  color: #b58900;
+}
+.highlight .na {
+  color: #268bd2;
+}
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
+  color: #859900;
+}
+.highlight .ss {
+  color: #859900;
+}
+    </style>
+    <link href="stylesheets/screen-c9d8fa83.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all-e9bde216.js"></script>
+
+    <script>
+      $(function() { setupCodeCopy(); });
+    </script>
+  </head>
+
+  <body class="index" data-languages="[&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar-cad8cdcb.png" alt="" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo-1a571823.png" class="logo" alt="" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="javascript">NodeJS</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#authentication-and-initialisation" class="toc-h2 toc-link" data-title="Authentication and initialisation">Authentication and initialisation</a>
+                  </li>
+                  <li>
+                    <a href="#using-the-transcription-api" class="toc-h2 toc-link" data-title=" Using the transcription API"> Using the transcription API</a>
+                  </li>
+                  <li>
+                    <a href="#language-codes" class="toc-h2 toc-link" data-title="Language Codes">Language Codes</a>
+                  </li>
+                  <li>
+                    <a href="#supported-encodings" class="toc-h2 toc-link" data-title="Supported encodings">Supported encodings</a>
+                  </li>
+                  <li>
+                    <a href="#support" class="toc-h2 toc-link" data-title="Support">Support</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+          </li>
+      </ul>
+        <ul class="toc-footer">
+            <li><a href='https://www.amberscript.com/en/speech-to-text-api'>Sign Up for our Transcription API</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to AmberScript&#39;s Realt Time Transcription API!</p>
+
+<p>This page will guide you through setting up a websocket connection to our Real Time Transcription endpoint.</p>
+
+<aside class="notice">
+    Our API only supports the Websocket protocol as defined in the rfc [here](https://datatracker.ietf.org/doc/html/rfc6455)
+</aside>
+<h2 id='authentication-and-initialisation'>Authentication and initialisation</h2>
+<p>We will provide you with an <code>API_KEY</code> required to access our endpoints.</p>
+
+<p>Authentication is done via an &quot;INIT&quot; type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.</p>
+
+<p>In addition to the API key, you must also pass the language, audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.</p>
+
+<p>The audio configuration must contain the sample rate of your audio input together with the <a href="#supported-encodings">encoding</a></p>
+
+<p>And example of the INIT message, using the default values looks like this:</p>
+
+<blockquote>
+<p>Example A: INIT message</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"messageType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INIT"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"apiKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;your-api-key&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"audioConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"sample_rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">16000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"encoding"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s16le"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"outputConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"transcription"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"partials"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>As of version 1.0, we only support the transcription format.</p>
+<h2 id='using-the-transcription-api'> Using the transcription API</h2>
+<aside class="warning">
+    Your client will be getting regular ping messages as defined in the [protocol specification](https://datatracker.ietf.org/doc/html/rfc6455#page-37). Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+</aside>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">SERVER_IP</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">api.amberscript.com/real-time/</span><span class="dl">"</span><span class="p">;</span>
+<span class="c1">// example only for node clients.</span>
+<span class="kd">const</span> <span class="nx">WebSocket</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">ws</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">"</span><span class="s2">wss://api.amberscript.com/real-time/</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">open</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">alive</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span>
+    <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+      <span class="na">messageType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INIT</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">language</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">LANGUAGE</span><span class="p">,</span>
+      <span class="na">apiKey</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">API_KEY</span><span class="p">,</span>
+      <span class="na">audioConfig</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">sample_rate</span><span class="p">:</span> <span class="mi">48000</span><span class="p">,</span>
+        <span class="na">encoding</span><span class="p">:</span> <span class="dl">"</span><span class="s2">s32le</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">outputConfig</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">partials</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">})</span>
+  <span class="p">);</span>
+  <span class="nx">interval</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">client</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">onMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">));</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">pong</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">alive</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">sendAudio</span><span class="p">(</span><span class="nx">audioBuffer</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">client</span><span class="p">.</span><span class="nx">readyState</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cleint</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">audioBuffer</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// set up ping pong from your client to the service</span>
+<span class="kd">let</span> <span class="nx">interval</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
+  <span class="nx">setInterval</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">client</span><span class="p">.</span><span class="nx">alive</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">client</span><span class="p">.</span><span class="nx">terminate</span><span class="p">();</span>
+      <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">"</span><span class="s2">wss://api.amberscript.com/real-time/</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">client</span><span class="p">.</span><span class="nx">readyState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">client</span><span class="p">.</span><span class="nx">ping</span><span class="p">();</span>
+        <span class="nx">client</span><span class="p">.</span><span class="nx">alive</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span> <span class="mi">30000</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">onMessage</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">objMsg</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">objMsg</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">PartialResult</span><span class="dl">"</span><span class="p">:</span>
+      <span class="c1">// object.message has the partial transcription for this segment</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">FinalResult</span><span class="dl">"</span><span class="p">:</span>
+      <span class="c1">// object.message has the final transcription for this segment</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">Info</span><span class="dl">"</span><span class="p">:</span>
+      <span class="c1">// object.message contains information regarding your configuration</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">Warning</span><span class="dl">"</span><span class="p">:</span>
+      <span class="c1">// object.message contains data regarding the warning and a reason</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">Error</span><span class="dl">"</span><span class="p">:</span>
+      <span class="c1">// object.message contains a reason for the error</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>After sending the initialisation message, you can then start sending the audio packets.</p>
+
+<p>If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect connection drops and reconnect.</p>
+
+<p>Once you start sending audio data, you should expect to receive tanscriptions.</p>
+
+<p>If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is retried.</p>
+<h3 id='return-message-types'>Return message types</h3>
+<p>This service will output different types of messages:
+| Type | Description |
+|------- |---------------------------------------- |
+| Error | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers |
+| Info | General information about audio configuration |
+| Warning | Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations |
+| PartialResult | Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast |
+| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates. |</p>
+
+<p>Clients should expect the format of the messages to follow this pattern:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the above types&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String | Object&lt;message: Array&lt;Object&gt;&gt;&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.</p>
+
+<p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.</p>
+
+<blockquote>
+<p>Example B: Warning example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Warning"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Warning"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"current_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max_retries"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"current_timer"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Workers are not available. Retrying connection in 10 seconds..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Example C: Partial result type</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PartialResult"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"682758c0-47bb-44b4-b4d3-93952580aa25"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"segments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Testing"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"transcript"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Testing testing testing testing"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Example D: Final result type</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FinalResult"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"682758c0-47bb-44b4-b4d3-93952580aa25"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"segments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Testing,"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.23</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"length"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing,"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.67</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.21</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"length"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.54</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing,"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.21</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.72</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"length"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.51</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing,"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.72</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.23</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"length"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.51</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="mf">8.28</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"length"</span><span class="p">:</span><span class="w"> </span><span class="mf">8.28</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"transcript"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Testing, testing, testing, testing, "</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h2 id='language-codes'>Language Codes</h2>
+<table><thead>
+<tr>
+<th>Language</th>
+<th>Code</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Dutch</td>
+<td>nl</td>
+</tr>
+<tr>
+<td>English</td>
+<td>en</td>
+</tr>
+<tr>
+<td>French</td>
+<td>fr</td>
+</tr>
+<tr>
+<td>German</td>
+<td>de</td>
+</tr>
+</tbody></table>
+<h2 id='supported-encodings'>Supported encodings</h2>
+<table><thead>
+<tr>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>f32be</td>
+<td>PCM 32-bit floating-point big-endian</td>
+</tr>
+<tr>
+<td>f32le</td>
+<td>PCM 32-bit floating-point little-endian</td>
+</tr>
+<tr>
+<td>s16be</td>
+<td>PCM signed 16-bit big-endian</td>
+</tr>
+<tr>
+<td>s16le</td>
+<td>PCM signed 16-bit little-endian</td>
+</tr>
+<tr>
+<td>s24be</td>
+<td>PCM signed 24-bit big-endian</td>
+</tr>
+<tr>
+<td>s24le</td>
+<td>PCM signed 24-bit little-endian</td>
+</tr>
+<tr>
+<td>s32be</td>
+<td>PCM signed 32-bit big-endian</td>
+</tr>
+<tr>
+<td>s32le</td>
+<td>PCM signed 32-bit little-endian</td>
+</tr>
+<tr>
+<td>u16be</td>
+<td>PCM unsigned 16-bit big-endian</td>
+</tr>
+<tr>
+<td>u16le</td>
+<td>PCM unsigned 16-bit little-endian</td>
+</tr>
+<tr>
+<td>u24be</td>
+<td>PCM unsigned 24-bit big-endian</td>
+</tr>
+<tr>
+<td>u24le</td>
+<td>PCM unsigned 24-bit little-endian</td>
+</tr>
+<tr>
+<td>u32be</td>
+<td>PCM unsigned 32-bit big-endian</td>
+</tr>
+<tr>
+<td>u32le</td>
+<td>PCM unsigned 32-bit little-endian</td>
+</tr>
+</tbody></table>
+<h2 id='support'>Support</h2>
+<p>If you need any technical assistance, feel free to contact <code>info (at) amberscript (dot) com</code></p>
+<h1 id='errors'>Errors</h1>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request is invalid. Please check your request body and/or parameters.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is invalid.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- You do have access to requested resource.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The requested resource could not be found.</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="javascript">NodeJS</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
