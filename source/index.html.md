@@ -7,9 +7,6 @@ language_tabs: # must be one of https://git.io/vQNgJ
 toc_footers:
   - <a href='https://www.amberscript.com/en/speech-to-text-api'>Sign Up for our Transcription API</a>
 
-includes:
-  - errors
-
 search: true
 
 code_clipboard: true
