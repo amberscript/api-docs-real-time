@@ -292,3 +292,23 @@ This can help you identify the sequence of the results. Each partial result will
 ## Support
 
 If you need any technical assistance, feel free to contact `info (at) amberscript (dot) com`.
+
+## Potential errors and Troubleshooting 
+
+| Error message | Description                             |
+| ------ | --------------------------------------- |
+| Something went wrong when setting up a connection to our services. Please try again later, or contact support.  |  This error indicates that workers are not available right now. You should generally attempt new connections in 1-2 minutes after this error occurs. If the problem persists, please do contact us.  |
+| Your client seems to have been inactive for more than one minute. If this is a mistake, try again or contact support  | This error is very unlikely to occur. Your implementation might not be following the WebSocket protocol, and is not responding to ping control frames as detailed in the warning [here](#using-the-transcription-API). |
+| Something went wrong when processing your input. Please try again later, or contact support.  | This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for techical support           |
+| Your language configuration is missing. Please send your API key and language under the format {language: <langugage>, apiKey: <your-api-key>}. This connection will now be closed  | Make sure your JSON message is stringified and that the language configuration uses the correct key        |
+| Your api key is missing. Please send your API key and language under the format {language: <langugage>, apiKey: <your-api-key>}. This connection will now be closed  |    Make sure your JSON message is stringified and that the API key uses the correct key     |
+| This language is not supported.  | See [language](#language-codes) for our supported languages. If you are interested in additional languages, please contact our support.        |
+| This API key is not recognised. Closing connection...  | Double check your API key. If there are no typos, then please contact support in order to get your API key again.           |
+| Your status is <different status than ACTIVE>. Closing connection...  | Your account has been disabled. Contact support in order to clarify the issues with your accound         |
+| You must send your messages under a JSON format. This connection will now be closed  | Please stringify your JSON messages before sending them.          |
+| Something went wrong  | This error message is the equivalent of a 500 status code. If the situation is not resolved after reattempting connections, then please contact our support.     |
+| Something went wrong when transcribing your input.  |   This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models' outputs. Please contact support if you ever encounter this message.   |
+
+<aside class="info">
+    We are planning on providing users with error codes, together with the messages detailed above in future versions. We expect that this will make troubleshooting easier, and will be more convenient, but it is currently absent from this version. We will update this section of the documentation as soon as the feature is available.
+</aside>
