@@ -339,7 +339,7 @@
 <p>This page will guide you through setting up a websocket connection to our Real Time Transcription endpoint.</p>
 
 <aside class="notice">
-    Our API only supports the Websocket protocol as defined in the rfc [here](https://datatracker.ietf.org/doc/html/rfc6455)
+    Our API only supports the Websocket protocol as defined in the rfc <a href='https://datatracker.ietf.org/doc/html/rfc6455'>here.</a>
 </aside>
 <h2 id='authentication-and-initialisation'>Authentication and initialisation</h2>
 <p>We will provide you with an <code>API_KEY</code> required to access our endpoints.</p>
@@ -372,7 +372,7 @@
 <p>As of version 1.0, we only support the transcription format.</p>
 <h2 id='using-the-transcription-api'> Using the transcription API</h2>
 <aside class="warning">
-    Your client will be getting regular ping messages as defined in the [protocol specification](https://datatracker.ietf.org/doc/html/rfc6455#page-37). Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">SERVER_IP</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">api.amberscript.com/real-time/</span><span class="dl">"</span><span class="p">;</span>
 <span class="c1">// example only for node clients.</span>
@@ -461,7 +461,7 @@
 </thead><tbody>
 <tr>
 <td>Error</td>
-<td>Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers</td>
+<td>Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.</td>
 </tr>
 <tr>
 <td>Info</td>
@@ -469,21 +469,21 @@
 </tr>
 <tr>
 <td>Warning</td>
-<td>Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations</td>
+<td>Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.</td>
 </tr>
 <tr>
 <td>PartialResult</td>
-<td>Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast</td>
+<td>Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes.</td>
 </tr>
 <tr>
 <td>FinalResult</td>
-<td>Final transcription for that segment of speech. Will not be recieving any more updates.</td>
+<td>Final transcription for that segment of speech. Will not be recieving any more updates for this segment. The unique identifier will reset after this result is received. Will contain alignment and confidence information</td>
 </tr>
 </tbody></table>
 
 <p>Clients should expect the format of the messages to follow this pattern:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the above types&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the types from the table on the left&gt;"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String | Object&lt;message: Array&lt;Object&gt;&gt;&gt;"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
