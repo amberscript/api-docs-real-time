@@ -28,7 +28,7 @@ We will provide you with an `API_KEY` required to access our endpoints.
 
 Authentication is done via an "INIT" type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.
 
-In addition to the API key, you must also pass the language, audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
+In addition to the API key, you must also pass the [language](#language-codes), audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
 
 The audio configuration must contain the sample rate of your audio input together with the [encoding](#supported-encodings)
 
@@ -291,4 +291,4 @@ This can help you identify the sequence of the results. Each partial result will
 
 ## Support
 
-If you need any technical assistance, feel free to contact `info (at) amberscript (dot) com`
+If you need any technical assistance, feel free to contact `info (at) amberscript (dot) com`.
