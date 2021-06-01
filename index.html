@@ -345,16 +345,6 @@
     Our API only supports the Websocket protocol as defined in the rfc <a href='https://datatracker.ietf.org/doc/html/rfc6455'>here.</a>
 </aside>
 <h2 id='authentication-and-initialisation'>Authentication and initialisation</h2>
-<p>We will provide you with an <code>API_KEY</code> required to access our endpoints.</p>
-
-<p>Authentication is done via an &quot;INIT&quot; type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.</p>
-
-<p>In addition to the API key, you must also pass the <a href="#language-codes">language</a>, audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.</p>
-
-<p>The audio configuration must contain the sample rate of your audio input together with the <a href="#supported-encodings">encoding</a></p>
-
-<p>And example of the INIT message, using the default values looks like this:</p>
-
 <blockquote>
 <p>Example A: INIT message</p>
 </blockquote>
@@ -372,11 +362,21 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
+<p>We will provide you with an <code>API_KEY</code> required to access our endpoints.</p>
+
+<p>Authentication is done via an &quot;INIT&quot; type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.</p>
+
+<p>In addition to the API key, you must also pass the <a href="#language-codes">language</a>, audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.</p>
+
+<p>The audio configuration must contain the sample rate of your audio input together with the <a href="#supported-encodings">encoding</a></p>
+
+<p>And example of the INIT message, using the default values looks like this:</p>
+
 <p>As of version 1.0, we only support the transcription format.</p>
 <h2 id='using-the-transcription-api'> Using the transcription API</h2>
-<aside class="warning">
-    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
-</aside>
+<blockquote>
+<p>Example B: Sending and receiving messages</p>
+</blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">SERVER_IP</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">api.amberscript.com/real-time/</span><span class="dl">"</span><span class="p">;</span>
 <span class="c1">// example only for node clients.</span>
 <span class="kd">const</span> <span class="nx">WebSocket</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">ws</span><span class="dl">"</span><span class="p">);</span>
@@ -386,8 +386,8 @@
   <span class="nx">client</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span>
     <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
       <span class="na">messageType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INIT</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">language</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">LANGUAGE</span><span class="p">,</span>
-      <span class="na">apiKey</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">API_KEY</span><span class="p">,</span>
+      <span class="na">language</span><span class="p">:</span> <span class="dl">'</span><span class="s1">en</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">apiKey</span><span class="p">:</span> <span class="dl">'</span><span class="s1">my-api-key</span><span class="dl">'</span><span class="p">,</span>
       <span class="na">audioConfig</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">sample_rate</span><span class="p">:</span> <span class="mi">48000</span><span class="p">,</span>
         <span class="na">encoding</span><span class="p">:</span> <span class="dl">"</span><span class="s2">s32le</span><span class="dl">"</span><span class="p">,</span>
@@ -446,6 +446,18 @@
   <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
+<blockquote>
+<p>Example C: Message structure</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the types from the table on the left&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String | Object&lt;message: Array&lt;Object&gt;&gt;&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<aside class="warning">
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+</aside>
+
 <p>After sending the initialisation message, you can then start sending the audio packets.</p>
 
 <p>If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect connection drops and reconnect.</p>
@@ -454,48 +466,8 @@
 
 <p>If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is retried.</p>
 <h3 id='return-message-types'>Return message types</h3>
-<p>This service will output different types of messages:</p>
-
-<table><thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Error</td>
-<td>Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.</td>
-</tr>
-<tr>
-<td>Info</td>
-<td>General information about audio configuration</td>
-</tr>
-<tr>
-<td>Warning</td>
-<td>Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.</td>
-</tr>
-<tr>
-<td>PartialResult</td>
-<td>Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes.</td>
-</tr>
-<tr>
-<td>FinalResult</td>
-<td>Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information</td>
-</tr>
-</tbody></table>
-
-<p>Clients should expect the format of the messages to follow this pattern:</p>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the types from the table on the left&gt;"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String | Object&lt;message: Array&lt;Object&gt;&gt;&gt;"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.</p>
-
-<p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.</p>
-
 <blockquote>
-<p>Example B: Warning example</p>
+<p>Example D: Warning example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Warning"</span><span class="p">,</span><span class="w">
@@ -509,7 +481,7 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
-<p>Example C: Partial result type</p>
+<p>Example E: Partial result type</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PartialResult"</span><span class="p">,</span><span class="w">
@@ -539,7 +511,7 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
-<p>Example D: Final result type</p>
+<p>Example F: Final result type</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FinalResult"</span><span class="p">,</span><span class="w">
@@ -586,7 +558,43 @@
     </span><span class="nl">"transcript"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Testing, testing, testing, testing, "</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='language-codes'>Language Codes</h2>
+</span></code></pre></div>
+<p>This service will output different types of messages:</p>
+
+<table><thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Error</td>
+<td>Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.</td>
+</tr>
+<tr>
+<td>Info</td>
+<td>General information about audio configuration</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.</td>
+</tr>
+<tr>
+<td>PartialResult</td>
+<td>Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes.</td>
+</tr>
+<tr>
+<td>FinalResult</td>
+<td>Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information</td>
+</tr>
+</tbody></table>
+
+<p>Clients should expect the format of the messages to follow the pattern visible in Example C.</p>
+
+<p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.</p>
+
+<p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.</p>
+<h2 id='language-codes'>Language Codes</h2>
 <table><thead>
 <tr>
 <th>Language</th>
