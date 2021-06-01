@@ -24,16 +24,6 @@ This page will guide you through setting up a websocket connection to our Real T
 
 ## Authentication and initialisation
 
-We will provide you with an `API_KEY` required to access our endpoints.
-
-Authentication is done via an "INIT" type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.
-
-In addition to the API key, you must also pass the [language](#language-codes), audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
-
-The audio configuration must contain the sample rate of your audio input together with the [encoding](#supported-encodings)
-
-And example of the INIT message, using the default values looks like this:
-
 > Example A: INIT message
 
 ```json
@@ -52,13 +42,21 @@ And example of the INIT message, using the default values looks like this:
 }
 ```
 
+We will provide you with an `API_KEY` required to access our endpoints.
+
+Authentication is done via an "INIT" type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.
+
+In addition to the API key, you must also pass the [language](#language-codes), audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
+
+The audio configuration must contain the sample rate of your audio input together with the [encoding](#supported-encodings)
+
+And example of the INIT message, using the default values looks like this:
+
+
 As of version 1.0, we only support the transcription format.
 
 ## Using the transcription API
-
-<aside class="warning">
-    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
-</aside>
+> Example B: Sending and receiving messages
 
 ```javascript
 const SERVER_IP = "api.amberscript.com/real-time/";
@@ -70,8 +68,8 @@ client.on("open", () => {
   client.send(
     JSON.stringify({
       messageType: "INIT",
-      language: process.env.LANGUAGE,
-      apiKey: process.env.API_KEY,
+      language: 'en',
+      apiKey: 'my-api-key',
       audioConfig: {
         sample_rate: 48000,
         encoding: "s32le",
@@ -130,6 +128,17 @@ function onMessage(data) {
   return false;
 }
 ```
+> Example C: Message structure
+
+```json
+{
+  "type": "<String; one of the types from the table on the left>",
+  "message": "<String | Object<message: Array<Object>>>"
+}
+```
+<aside class="warning">
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+</aside>
 
 After sending the initialisation message, you can then start sending the audio packets.
 
@@ -141,31 +150,8 @@ If something goes wrong during setup, or if the server loses its connection to o
 
 ### Return message types
 
-This service will output different types of messages:
 
-
-| Type   | Description                              |
-|------- |----------------------------------------  |
-| Error  | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers. |
-| Info   | General information about audio configuration |
-| Warning | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration. |
-| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
-| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information  |
-
-Clients should expect the format of the messages to follow this pattern:
-
-```json
-{
-  "type": "<String; one of the types from the table on the left>",
-  "message": "<String | Object<message: Array<Object>>>"
-}
-```
-
-If you set the partials configured to `true`, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.
-
-This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.
-
-> Example B: Warning example
+> Example D: Warning example
 
 ```json
 {
@@ -180,7 +166,7 @@ This can help you identify the sequence of the results. Each partial result will
 }
 ```
 
-> Example C: Partial result type
+> Example E: Partial result type
 
 ```json
 {
@@ -211,7 +197,7 @@ This can help you identify the sequence of the results. Each partial result will
 }
 ```
 
-> Example D: Final result type
+> Example F: Final result type
 
 ```json
 {
@@ -260,6 +246,25 @@ This can help you identify the sequence of the results. Each partial result will
   }
 }
 ```
+
+This service will output different types of messages:
+
+
+| Type   | Description                              |
+|------- |----------------------------------------  |
+| Error  | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers. |
+| Info   | General information about audio configuration |
+| Warning | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration. |
+| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
+| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information  |
+
+Clients should expect the format of the messages to follow the pattern visible in Example C.
+
+
+If you set the partials configured to `true`, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.
+
+This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.
+
 
 ## Language Codes
 
