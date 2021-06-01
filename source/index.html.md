@@ -142,10 +142,12 @@ If something goes wrong during setup, or if the server loses its connection to o
 ### Return message types
 
 This service will output different types of messages:
-| Type | Description |
-|------- |---------------------------------------- |
-| Error | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers |
-| Info | General information about audio configuration |
+
+
+| Type   | Description                              |
+|------- |----------------------------------------  |
+| Error  | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers |
+| Info   | General information about audio configuration |
 | Warning | Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations |
 | PartialResult | Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast |
 | FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates. |
