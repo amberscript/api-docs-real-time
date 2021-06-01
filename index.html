@@ -323,6 +323,9 @@
                   <li>
                     <a href="#support" class="toc-h2 toc-link" data-title="Support">Support</a>
                   </li>
+                  <li>
+                    <a href="#potential-errors-and-troubleshooting" class="toc-h2 toc-link" data-title="Potential errors and Troubleshooting">Potential errors and Troubleshooting</a>
+                  </li>
               </ul>
           </li>
       </ul>
@@ -673,6 +676,62 @@
 </tbody></table>
 <h2 id='support'>Support</h2>
 <p>If you need any technical assistance, feel free to contact <code>info (at) amberscript (dot) com</code>.</p>
+<h2 id='potential-errors-and-troubleshooting'>Potential errors and Troubleshooting</h2>
+<table><thead>
+<tr>
+<th>Error message</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Something went wrong when setting up a connection to our services. Please try again later, or contact support.</td>
+<td>This error indicates that workers are not available right now. You should generally attempt new connections in 1-2 minutes after this error occurs. If the problem persists, please do contact us.</td>
+</tr>
+<tr>
+<td>Your client seems to have been inactive for more than one minute. If this is a mistake, try again or contact support</td>
+<td>This error is very unlikely to occur. Your implementation might not be following the WebSocket protocol, and is not responding to ping control frames as detailed in the warning <a href="#using-the-transcription-API">here</a>.</td>
+</tr>
+<tr>
+<td>Something went wrong when processing your input. Please try again later, or contact support.</td>
+<td>This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for techical support</td>
+</tr>
+<tr>
+<td>Your language configuration is missing. Please send your API key and language under the format {language: <langugage>, apiKey: <your-api-key>}. This connection will now be closed</td>
+<td>Make sure your JSON message is stringified and that the language configuration uses the correct key</td>
+</tr>
+<tr>
+<td>Your api key is missing. Please send your API key and language under the format {language: <langugage>, apiKey: <your-api-key>}. This connection will now be closed</td>
+<td>Make sure your JSON message is stringified and that the API key uses the correct key</td>
+</tr>
+<tr>
+<td>This language is not supported.</td>
+<td>See <a href="#language-codes">language</a> for our supported languages. If you are interested in additional languages, please contact our support.</td>
+</tr>
+<tr>
+<td>This API key is not recognised. Closing connection...</td>
+<td>Double check your API key. If there are no typos, then please contact support in order to get your API key again.</td>
+</tr>
+<tr>
+<td>Your status is <different status than ACTIVE>. Closing connection...</td>
+<td>Your account has been disabled. Contact support in order to clarify the issues with your accound</td>
+</tr>
+<tr>
+<td>You must send your messages under a JSON format. This connection will now be closed</td>
+<td>Please stringify your JSON messages before sending them.</td>
+</tr>
+<tr>
+<td>Something went wrong</td>
+<td>This error message is the equivalent of a 500 status code. If the situation is not resolved after reattempting connections, then please contact our support.</td>
+</tr>
+<tr>
+<td>Something went wrong when transcribing your input.</td>
+<td>This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models&#39; outputs. Please contact support if you ever encounter this message.</td>
+</tr>
+</tbody></table>
+
+<aside class="info">
+    We are planning on providing users with error codes, together with the messages detailed above in future versions. We expect that this will make troubleshooting easier, and will be more convenient, but it is currently absent from this version. We will update this section of the documentation as soon as the feature is available.
+</aside>
 
       </div>
       <div class="dark-box">
