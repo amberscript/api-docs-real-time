@@ -451,14 +451,35 @@
 
 <p>If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is retried.</p>
 <h3 id='return-message-types'>Return message types</h3>
-<p>This service will output different types of messages:
-| Type | Description |
-|------- |---------------------------------------- |
-| Error | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers |
-| Info | General information about audio configuration |
-| Warning | Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations |
-| PartialResult | Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast |
-| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates. |</p>
+<p>This service will output different types of messages:</p>
+
+<table><thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Error</td>
+<td>Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers</td>
+</tr>
+<tr>
+<td>Info</td>
+<td>General information about audio configuration</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations</td>
+</tr>
+<tr>
+<td>PartialResult</td>
+<td>Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast</td>
+</tr>
+<tr>
+<td>FinalResult</td>
+<td>Final transcription for that segment of speech. Will not be recieving any more updates.</td>
+</tr>
+</tbody></table>
 
 <p>Clients should expect the format of the messages to follow this pattern:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
