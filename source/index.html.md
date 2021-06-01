@@ -19,7 +19,7 @@ Welcome to AmberScript's Realt Time Transcription API!
 This page will guide you through setting up a websocket connection to our Real Time Transcription endpoint.
 
 <aside class="notice">
-    Our API only supports the Websocket protocol as defined in the rfc [here](https://datatracker.ietf.org/doc/html/rfc6455)
+    Our API only supports the Websocket protocol as defined in the rfc <a href='https://datatracker.ietf.org/doc/html/rfc6455'>here.</a>
 </aside>
 
 ## Authentication and initialisation
@@ -57,7 +57,7 @@ As of version 1.0, we only support the transcription format.
 ## Using the transcription API
 
 <aside class="warning">
-    Your client will be getting regular ping messages as defined in the [protocol specification](https://datatracker.ietf.org/doc/html/rfc6455#page-37). Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 
 ```javascript
@@ -146,17 +146,17 @@ This service will output different types of messages:
 
 | Type   | Description                              |
 |------- |----------------------------------------  |
-| Error  | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers |
+| Error  | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers. |
 | Info   | General information about audio configuration |
-| Warning | Only used when bad input was detected when setting up audio config. Will notify users of fallback configurations |
-| PartialResult | Partial transcription received from the workers. It may, or may not be accurate, but it is quite fast |
-| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates. |
+| Warning | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration. |
+| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
+| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. The unique identifier will reset after this result is received. Will contain alignment and confidence information  |
 
 Clients should expect the format of the messages to follow this pattern:
 
 ```json
 {
-  "type": "<String; one of the above types>",
+  "type": "<String; one of the types from the table on the left>",
   "message": "<String | Object<message: Array<Object>>>"
 }
 ```
