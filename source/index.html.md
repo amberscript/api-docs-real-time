@@ -150,7 +150,7 @@ This service will output different types of messages:
 | Info   | General information about audio configuration |
 | Warning | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration. |
 | PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
-| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. The unique identifier will reset after this result is received. Will contain alignment and confidence information  |
+| FinalResult | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information  |
 
 Clients should expect the format of the messages to follow this pattern:
 
