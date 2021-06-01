@@ -294,9 +294,6 @@ This can help you identify the sequence of the results. Each partial result will
 | u32be  | PCM unsigned 32-bit big-endian          |
 | u32le  | PCM unsigned 32-bit little-endian       |
 
-## Support
-
-If you need any technical assistance, feel free to contact `info (at) amberscript (dot) com`.
 
 ## Potential errors and Troubleshooting 
 
@@ -317,3 +314,7 @@ If you need any technical assistance, feel free to contact `info (at) amberscrip
 <aside class="info">
     We are planning on providing users with error codes, together with the messages detailed above in future versions. We expect that this will make troubleshooting easier, and will be more convenient, but it is currently absent from this version. We will update this section of the documentation as soon as the feature is available.
 </aside>
+
+## Support
+
+If you need any technical assistance, feel free to contact `info (at) amberscript (dot) com`.
