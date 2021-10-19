@@ -155,14 +155,12 @@ If something goes wrong during setup, or if the server loses its connection to o
 
 ```json
 {
-  "type": "Warning",
-  "message": {
     "type": "Warning",
     "current_counter": 1,
     "max_retries": 4,
-    "current_timer": 10000,
+    "current_timer": 10,
     "message": "Workers are not available. Retrying connection in 10 seconds..."
-  }
+  
 }
 ```
 
