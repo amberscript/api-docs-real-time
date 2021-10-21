@@ -147,7 +147,7 @@ function exitHandler(options, exitCode) {
     Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 
-After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see [short string message codes and ready indicators](#Short-string-message-codes-and-ready-indicators))
+After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see [short string message codes and ready indicators](#potential-errors-and-troubleshooting))
 
 > Example D: Info message sequence
 
