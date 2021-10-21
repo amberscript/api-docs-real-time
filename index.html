@@ -466,7 +466,7 @@
     Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 
-<p>After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see <a href="#Short-string-message-codes-and-ready-indicators">short string message codes and ready indicators</a>)</p>
+<p>After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see <a href="#potential-errors-and-troubleshooting">short string message codes and ready indicators</a>)</p>
 
 <blockquote>
 <p>Example D: Info message sequence</p>
