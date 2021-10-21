@@ -139,7 +139,7 @@ function exitHandler(options, exitCode) {
   "type": "<String; one of the types from the table on the left>",
   "message": "<String | Object<message: Array<Object>>>",
   "ready": "<boolean; not present on result type messages>",
-  "message": "<String; not present on result type messages",
+  "messageCode": "<String; not present on result type messages",
 }
 ```
 
