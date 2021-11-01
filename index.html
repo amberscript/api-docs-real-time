@@ -361,7 +361,8 @@
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"outputConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"transcription"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"partials"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="nl">"partials"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"enablePunctuation"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -396,6 +397,7 @@
       <span class="p">},</span>
       <span class="na">outputConfig</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">partials</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// punctuation is enabled by default</span>
       <span class="p">},</span>
     <span class="p">})</span>
   <span class="p">);</span>
@@ -631,6 +633,8 @@
 <p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.</p>
 
 <p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.</p>
+
+<p>We also offer the possibility for clients to disable the punctuation. You can do this by passing the <code>enablePunctuation</code> flag with the value of <code>false</code>. By default, punctuation will be enabled.</p>
 <h2 id='language-codes'>Language Codes</h2>
 <table><thead>
 <tr>
@@ -770,7 +774,19 @@
 <td>Something went wrong when transcribing your input.</td>
 <td>This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models&#39; outputs. Please contact support if you ever encounter this message.</td>
 </tr>
+<tr>
+<td>You client has been connected for more than {x**}h. This connection will be terminated.</td>
+<td>This error message indicates that your client needs to refresh the connection to our service, in the eventuality that your client has not finished streaming.</td>
+</tr>
+<tr>
+<td>You are not allowed to use more than {x**} connections. This connection will be terminated.</td>
+<td>This error message indicates that your client is attempting to open multiple connections to our service. If you want to bypass this limitation, please contact our support.</td>
+</tr>
 </tbody></table>
+
+<p>* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h. This limit can change in future versions.</p>
+
+<p>** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can be bypassed on request. This limit can change in future versions.</p>
 <h3 id='short-string-message-codes-and-ready-indicators'>Short string message codes and ready indicators</h3>
 <p>Each client message will be accompanied by a short string message code in order to aid clients in identifying the information that each message contains. These message codes are only available for <strong>INFO</strong>, <strong>WARNING</strong>, and <strong>ERROR</strong> message types.</p>
 
@@ -786,7 +802,17 @@
 <tr>
 <td>noWorkerAvailableError</td>
 <td>ERROR</td>
-<td>This message code indicates that no transcription was found, even after attempting reconnection</td>
+<td>This message code indicates that no worker was found, even after attempting reconnection</td>
+</tr>
+<tr>
+<td>connectionCountExceeded</td>
+<td>ERROR</td>
+<td>This message code indicates that you cannot initiate any more connections to the service.</td>
+</tr>
+<tr>
+<td>connectionRefreshRequired</td>
+<td>ERROR</td>
+<td>This message code indicates that the connection has exceeded the maximum allowed duration. If your client has not finished streaming, then you need to open a new connection to the service.</td>
 </tr>
 <tr>
 <td>audioProcessingError</td>
@@ -897,6 +923,16 @@
 <td>inactiveUserError</td>
 <td>ERROR</td>
 <td>- userStatus: String type indicating the current status of the user used by the client.</td>
+</tr>
+<tr>
+<td>connectionCountExceeded</td>
+<td>ERROR</td>
+<td>- maxConnectionCount: int type indicating the amount of connections for the API key that was sent in the init message</td>
+</tr>
+<tr>
+<td>connectionRefreshRequired</td>
+<td>ERROR</td>
+<td>- maxDurationHours: int type indicating the maximum hours duration allowed for connections.</td>
 </tr>
 <tr>
 <td>defaultInputWarning</td>
