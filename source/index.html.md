@@ -37,7 +37,8 @@ This page will guide you through setting up a websocket connection to our Real T
   },
   "outputConfig": {
     "format": "transcription",
-    "partials": false
+    "partials": false,
+    "enablePunctuation": true
   }
 }
 ```
@@ -75,6 +76,7 @@ client.on("open", () => {
       },
       outputConfig: {
         partials: true,
+        // punctuation is enabled by default
       },
     })
   );
@@ -299,6 +301,8 @@ If you set the partials configured to `true`, then you will also receive partial
 
 This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.
 
+We also offer the possibility for clients to disable the punctuation. You can do this by passing the `enablePunctuation` flag with the value of `false`. By default, punctuation will be enabled.
+
 ## Language Codes
 
 | Language | Code |
@@ -342,6 +346,13 @@ This can help you identify the sequence of the results. Each partial result will
 | You must send your messages under a JSON format. This connection will now be closed                                                                                                      | Please stringify your JSON messages before sending them.                                                                                                                                                                                       |
 | Something went wrong                                                                                                                                                                     | This error message is the equivalent of a 500 status code. If the situation is not resolved after reattempting connections, then please contact our support.                                                                                   |
 | Something went wrong when transcribing your input.                                                                                                                                       | This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models' outputs. Please contact support if you ever encounter this message.                                         |
+| You client has been connected for more than {x**}h. This connection will be terminated.                                                                                                    | This error message indicates that your client needs to refresh the connection to our service, in the eventuality that your client has not finished streaming.                                         |
+| You are not allowed to use more than {x**} connections. This connection will be terminated.                                                                                                | This error message indicates that your client is attempting to open multiple connections to our service. If you want to bypass this limitation, please contact our support.                                           |
+
+\* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h. This limit can change in future versions.
+
+\** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can be bypassed on request. This limit can change in future versions.
+
 
 ### Short string message codes and ready indicators
 
@@ -351,7 +362,9 @@ Each client message will be accompanied by a short string message code in order 
 
 | messageCode                            | Message type | Explanation                                                                                                                                                                                                                                                |
 | -------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| noWorkerAvailableError                 | ERROR        | This message code indicates that no transcription was found, even after attempting reconnection                                                                                                                                                            |
+| noWorkerAvailableError                 | ERROR        | This message code indicates that no worker was found, even after attempting reconnection                                                                                                                                                            |
+| connectionCountExceeded                 | ERROR        | This message code indicates that you cannot initiate any more connections to the service.                                                                                                                                                           |
+| connectionRefreshRequired                 | ERROR        | This message code indicates that the connection has exceeded the maximum allowed duration. If your client has not finished streaming, then you need to open a new connection to the service.                                                                                                                                                            |
 | audioProcessingError                   | ERROR        | This message code indicates that a fatal error occurred when processing your audio input.                                                                                                                                                                  |
 | initialisationFailedError              | ERROR        | This message code indicates that a fatal error occurred when setting up the connection to our transcription workers.                                                                                                                                       |
 | inactiveClientError                    | ERROR        | This message code indicates that your client is not alive. If this message is received, make sure that your client is responding to pings coming from our service.                                                                                         |
@@ -382,12 +395,13 @@ Apart from the standard message structure (see Example C), some messages will co
 | messageCode                           	| Message type 	| Additional metadata                                                                                                                                                                                                                                                                                         	|
 |---------------------------------------	|--------------	|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | inactiveUserError                     	| ERROR        	|  - userStatus: String type indicating the current status of the user used by the client.                                                                                                                                                                                                                    	|
+| connectionCountExceeded                 | ERROR        	|  - maxConnectionCount: int type indicating the amount of connections for the API key that was sent in the init message                                                                                                                                                                                                                   	|
+| connectionRefreshRequired               | ERROR        	|  - maxDurationHours: int type indicating the maximum hours duration allowed for connections.                                                                                                                                                                                                                    	|
 | defaultInputWarning                   	| WARNING      	|  - sampleRate: int type indicating the default sample rate that will be used for your input<br/> - encoding: String type indicating the default encoding that will be used for your input                                                                                                                       	|
 | defaultOutputWarning                  	| WARNING      	|  - partials: boolean type indicating the default partial configuration for your output<br/>  - format: String type indicating the default transcription output format                                                                                                                                            	|
 | workerAcquisitionWarning              	| WARNING      	|  - current_counter: int type indicating the current attempt counter<br/>  - max_retries: int type indicating the maximum amount of retries until the client connection is terminated (once current_counter > max_retries)<br/>  - current_timer: int type indicating when the next attempt will be made (in seconds)  	|
 | connectionLostWorkerAcquisitionWarning 	| WARNING      	| Same metadata as the previous message, with the exception of the current_timer property; when a connection is lost, attempt #1 is made immediately                                                                                                                                                          	|
 | inputConfigurationInfo                	| INFO         	|  - sampleRate: int type indicating the sample rate received from the client in the INIT message<br/>  - encoding: String type indicating the encoding received from the client in the INIT message                                                                                                               	|
-
 
 ## Support
 
