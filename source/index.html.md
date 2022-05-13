@@ -306,11 +306,12 @@ We also offer the possibility for clients to disable the punctuation. You can do
 ## Language Codes
 
 | Language | Code |
-| -------- | ---- |
-| Dutch    | nl   |
-| English  | en   |
-| French   | fr   |
-| German   | de   |
+| -------- | -- |
+| Dutch    | nl |
+| English  | en |
+| French   | fr |
+| German   | de |
+| Italian   | it |
 
 ## Supported encodings
 
