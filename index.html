@@ -340,7 +340,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to AmberScript&#39;s Realt Time Transcription API!</p>
+<p>Welcome to AmberScript&#39;s Real Time Transcription API!</p>
 
 <p>This page will guide you through setting up a websocket connection to our Real Time Transcription endpoint.</p>
 
@@ -368,11 +368,14 @@
 </span></code></pre></div>
 <p>We will provide you with an <code>API_KEY</code> required to access our endpoints.</p>
 
-<p>Authentication is done via an &quot;INIT&quot; type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.</p>
+<p>Authentication is done via an &quot;INIT&quot; type message which must be sent as the first message once the socket connection is
+established. Anything else will result in errors and the incoming connection will be terminated.</p>
 
-<p>In addition to the API key, you must also pass the <a href="#language-codes">language</a>, audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.</p>
+<p>In addition to the API key, you must also pass the <a href="#language-codes">language</a>, audio, and format configurations. If you
+omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.</p>
 
-<p>The audio configuration must contain the sample rate of your audio input together with the <a href="#supported-encodings">encoding</a></p>
+<p>The audio configuration must contain the sample rate of your audio input together with
+the <a href="#supported-encodings">encoding</a></p>
 
 <p>And example of the INIT message, using the default values looks like this:</p>
 
@@ -414,6 +417,7 @@
     <span class="nx">cleint</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">audioBuffer</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
+
 <span class="c1">// set up ping pong from your client to the service</span>
 <span class="kd">let</span> <span class="nx">interval</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
   <span class="nx">setInterval</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -451,7 +455,7 @@
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">exitHandler</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">exitCode</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">client</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="na">messageType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">TRANSCRIPTION_FINISHED</span><span class="dl">"</span> <span class="p">}));</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="na">messageType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">TRANSCRIPTION_FINISHED</span><span class="dl">"</span><span class="p">}));</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -461,41 +465,51 @@
   </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; one of the types from the table on the left&gt;"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String | Object&lt;message: Array&lt;Object&gt;&gt;&gt;"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;boolean; not present on result type messages&gt;"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; not present on result type messages"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;String; not present on result type messages"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <aside class="warning">
-    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to `ping` frames. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 
-<p>After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see <a href="#potential-errors-and-troubleshooting">short string message codes and ready indicators</a>)</p>
+<p>After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that
+your client waits until a message with the ready flag is set to true (
+see <a href="#potential-errors-and-troubleshooting">short string message codes and ready indicators</a>)</p>
 
 <blockquote>
 <p>Example D: Info message sequence</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"Info"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"Input configuration set to sample rate of 48000 for encoding s32le"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"ready"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"sampleRate"</span><span class="p">:</span><span class="mi">48000</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"encoding"</span><span class="p">:</span><span class="s2">"s32le"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="s2">"inputConfigurationInfo"</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Info"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Input configuration set to sample rate of 48000 for encoding s32le"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sampleRate"</span><span class="p">:</span><span class="w"> </span><span class="mi">48000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"encoding"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s32le"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inputConfigurationInfo"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span><span class="p">{</span><span class="w">
-    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Recognition started"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recognitionStartedInfo"</span><span class="w">
+
+</span></code></pre></div>
+<p><em>After input configuration confirmation is received:</em></p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Recognition started"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recognitionStartedInfo"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect connection drops and reconnect.</p>
+<p>If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect
+connection drops and reconnect.</p>
 
-<p>Once you start sending audio data, you should expect to receive tanscriptions.</p>
+<p>Once you start sending audio data, you should expect to receive transcriptions.</p>
 
-<p>If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is retried.</p>
+<p>If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive
+warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections
+are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is
+retried.</p>
 
-<p>Once your client is finished with streaming data, they should always send a &quot;TRANSCRIPTION_FINISHED&quot; message to our service. See example B, exitHandler function.</p>
+<p>Once your client is finished with streaming data, they should always send a &quot;TRANSCRIPTION_FINISHED&quot; message to our
+service. See example B, exitHandler function.</p>
 <h3 id='return-message-types'>Return message types</h3>
 <blockquote>
 <p>Example E: Warning example</p>
@@ -509,14 +523,13 @@
   </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"workerAcquisitionWarning"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
-</span><span class="p">{</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WARNING"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"current_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"max_retries"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The worker has disconnected. The connection will be retried 4 times, with current counter at 1"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"connectionLostWorkerAcquisitionWarning"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="nl">"current_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"max_retries"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The worker has disconnected. The connection will be retried 4 times, with current counter at 1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"messageCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"connectionLostWorkerAcquisitionWarning"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ready"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -620,49 +633,28 @@
 </tr>
 <tr>
 <td>PartialResult</td>
-<td>Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes.</td>
+<td>Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes.</td>
 </tr>
 <tr>
 <td>FinalResult</td>
-<td>Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information</td>
+<td>Final transcription for that segment of speech. Will not be receiving any more updates for this segment. Will contain alignment and confidence information</td>
 </tr>
 </tbody></table>
 
-<p>Clients should expect the format of the messages to follow the pattern visible in Example C (do note that some messages may or may not contain extra properties that clients may choose to ignore).</p>
+<p>Clients should expect the format of the messages to follow the pattern visible in Example C (do note that some messages
+may or may not contain extra properties that clients may choose to ignore).</p>
 
-<p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.</p>
+<p>If you set the partials configured to <code>true</code>, then you will also receive partial transcriptions. You can see in the
+examples below that each message will have an id attached to it.</p>
 
-<p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.</p>
+<p>This can help you identify the sequence of the results. Each partial result will share the same id, until a final
+transcription is received. The final transcription will also share that id. Once you receive the final transcription,
+the id will reset and a new segment will start.</p>
 
-<p>We also offer the possibility for clients to disable the punctuation. You can do this by passing the <code>enablePunctuation</code> flag with the value of <code>false</code>. By default, punctuation will be enabled.</p>
+<p>We also offer the possibility for clients to disable the punctuation. You can do this by passing the <code>enablePunctuation</code>
+flag with the value of <code>false</code>. By default, punctuation will be enabled.</p>
 <h2 id='language-codes'>Language Codes</h2>
-<table><thead>
-<tr>
-<th>Language</th>
-<th>Code</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Dutch</td>
-<td>nl</td>
-</tr>
-<tr>
-<td>English</td>
-<td>en</td>
-</tr>
-<tr>
-<td>French</td>
-<td>fr</td>
-</tr>
-<tr>
-<td>German</td>
-<td>de</td>
-</tr>
-<tr>
-<td>Italian</td>
-<td>it</td>
-</tr>
-</tbody></table>
+<p>| Language | Code | | -------- | -- | | Dutch | nl | | English | en | | French | fr | | German | de | | Italian | it |</p>
 <h2 id='supported-encodings'>Supported encodings</h2>
 <table><thead>
 <tr>
@@ -744,14 +736,14 @@
 </tr>
 <tr>
 <td>Something went wrong when processing your input. Please try again later, or contact support.</td>
-<td>This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for techical support</td>
+<td>This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for technical support</td>
 </tr>
 <tr>
 <td>Your language configuration is missing. Please send your API key and language under the format {language: <langugage>, apiKey: &lt;your-api-key&gt;}. This connection will now be closed</td>
 <td>Make sure your JSON message is stringified and that the language configuration uses the correct key</td>
 </tr>
 <tr>
-<td>Your api key is missing. Please send your API key and language under the format {language: &lt;langugage&gt;, apiKey: &lt;your-api-key&gt;}. This connection will now be closed</td>
+<td>Your api key is missing. Please send your API key and language under the format {language: &lt;language&gt;, apiKey: &lt;your-api-key&gt;}. This connection will now be closed</td>
 <td>Make sure your JSON message is stringified and that the API key uses the correct key</td>
 </tr>
 <tr>
@@ -764,7 +756,7 @@
 </tr>
 <tr>
 <td>Your status is &lt;different status than ACTIVE&gt;. Closing connection...</td>
-<td>Your account has been disabled. Contact support in order to clarify the issues with your accound</td>
+<td>Your account has been disabled. Contact support in order to clarify the issues with your account</td>
 </tr>
 <tr>
 <td>You must send your messages under a JSON format. This connection will now be closed</td>
@@ -788,13 +780,20 @@
 </tr>
 </tbody></table>
 
-<p>* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h. This limit can change in future versions.</p>
+<p>* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h.
+This limit can change in future versions.</p>
 
-<p>** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can be bypassed on request. This limit can change in future versions.</p>
+<p>** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can
+be bypassed on request. This limit can change in future versions.</p>
 <h3 id='short-string-message-codes-and-ready-indicators'>Short string message codes and ready indicators</h3>
-<p>Each client message will be accompanied by a short string message code in order to aid clients in identifying the information that each message contains. These message codes are only available for <strong>INFO</strong>, <strong>WARNING</strong>, and <strong>ERROR</strong> message types.</p>
+<p>Each client message will be accompanied by a short string message code in order to aid clients in identifying the
+information that each message contains. These message codes are only available for <strong>INFO</strong>, <strong>WARNING</strong>, and <strong>ERROR</strong>
+message types.</p>
 
-<p><strong>INFO</strong>, <strong>WARNING</strong>, and <strong>ERROR</strong> message types will always hold a ready flag. However, there is only one message that will report if a worker is ready to start transcribing input. While it is recommended that you only start streaming when the ready flag is true, it is not mandatory. While not common, it is possible that there are delays between the worker acquisition and the start of the recognition process, which can lead to data loss.</p>
+<p><strong>INFO</strong>, <strong>WARNING</strong>, and <strong>ERROR</strong> message types will always hold a ready flag. However, there is only one message
+that will report if a worker is ready to start transcribing input. While it is recommended that you only start streaming
+when the ready flag is true, it is not mandatory. While not common, it is possible that there are delays between the
+worker acquisition and the start of the recognition process, which can lead to data loss.</p>
 
 <table><thead>
 <tr>
@@ -908,59 +907,111 @@
 <td>INFO</td>
 <td>This message code indicates that your INIT message was received. Your input configuration will be reported back to the client.</td>
 </tr>
+<tr>
+<td>transcriptionEndedInfo</td>
+<td>INFO</td>
+<td>This message code indicates that the service will not accept ASR input anymore, and that it is safe for you to clean up the connection. <br/> <br/> Can be safely ignored.</td>
+</tr>
 </tbody></table>
 
 <p>* This message can be safely ignored at v1.0, as the only supported format is &quot;transcription&quot;.</p>
 
 <p>** This is the only message that will have the ready flag set to <strong>true</strong>.</p>
+<h3 id='numerical-status-codes'>Numerical status codes</h3>
+<table><thead>
+<tr>
+<th style="text-align: center">Status code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: center">1000</td>
+<td>Standard code defined in the protocol specification. <br/> <br/> Indicates a normal closure, meaning that the purpose for which the connection was established has been fulfilled. <br/> <br/> This status code is associated with the <code>transcriptionEndedInfo</code> short string <code>INFO</code> code and can be safely ignored.</td>
+</tr>
+<tr>
+<td style="text-align: center">1003</td>
+<td>Standard code defined in the protocol specification.<br/> <br/> Indicates that the service has received input that it cannot accept. <br/> <br/> Please verify your INIT message if the closure occurs with this code <br/> <br/> This status code is associated with the <code>messageFormatNotJSONError</code> short string <code>ERROR</code> code.</td>
+</tr>
+<tr>
+<td style="text-align: center">1008</td>
+<td>Standard code defined in the protocol specification. <br/> <br/> Indicates that your client is not responsive to <code>pings</code> sent by our service. <br/> <br/> You should not be seeing this error code unless there is a fault in the way your client handles <code>pings</code> from our service. Please make sure that your client replies with a <code>pong</code> frame whenever a <code>ping</code> is received from our service. <br/> <br/> This status code is associated with the <code>inactiveClientError</code> short string <code>ERROR</code> code.</td>
+</tr>
+<tr>
+<td style="text-align: center">1011</td>
+<td>Standard code defined in the protocol specification. <br/> <br/> Indicates that an internal error has occurred in our service. <br/> Please try establishing a new connection to our service. If this provides no resolution, please reach out to our customer support.<br/> <br/> This status code is associated with the <code>audioProcessingError</code>, <code>initialisationFailedError</code>, <code>transcriptionError</code> short string <code>ERROR</code> codes.</td>
+</tr>
+<tr>
+<td style="text-align: center">1013</td>
+<td>Standard code defined in the protocol specification. <br/> <br/> Indicates that our service is currently busy with creating more resources. Please try establishing a new connection. <br/> <br/> This status code is associated with the <code>noWorkerAvailableError</code> short string <code>ERROR</code> code.</td>
+</tr>
+<tr>
+<td style="text-align: center">3000</td>
+<td>Standard code defined in the protocol specification. <br/> <br/> Indicates that you are not authorised to use our live ASR service. If this is a mistake, please reach out to our customer support. <br/> <br/> This status code is associated with the <code>missingOrInvalidKeyError</code>, <code>inactiveUserError</code> short string <code>ERROR</code> codes.</td>
+</tr>
+<tr>
+<td style="text-align: center">4000</td>
+<td>This is a custom code, not defined in the protocol specification. <br/> <br/> Indicates the fact that you have exceeded the maximum duration of the connection. Please reestablish a new connection to our service if you have more input to transcribe. <br/> <br/> This status code is associated with the <code>connectionRefreshRequired</code> short string <code>ERROR</code> code.</td>
+</tr>
+<tr>
+<td style="text-align: center">4001</td>
+<td>This is a custom code, not defined in the protocol specification. <br/> <br/> Indicates the fact that you are trying more connections than you are allowed. This restriction can be bypassed. Please reach out to our customer support and ask for the restriction to be removed for your <code>API key</code>.<br/> <br/> This status code is associated with the <code>connectionCountExceeded</code> short string <code>ERROR</code> code.</td>
+</tr>
+<tr>
+<td style="text-align: center">4002</td>
+<td>This is a custom code, not defined in the protocol specification. <br/>  <br/> Indicates the fact that the language configuration is missing from the <code>INIT</code> message, or that the language you are requesting is not available. Please check your <code>INIT</code> message and try again. <br/> <br/> This status code is associated with the <code>languageNotAvailableError</code> and <code>noLanguagePresentError</code> short string <code>ERROR</code> codes.</td>
+</tr>
+</tbody></table>
 <h2 id='extra-message-metadata'>Extra message metadata</h2>
-<p>Apart from the standard message structure (see Example C), some messages will contain additional information in order to aid clients in dealing with certain situations, such as the <strong>WARNING</strong> types. Some messages will only contain information that will confirm client settings (i.e <strong>INFO</strong> types). All the metadata in the table below can be safely ignored by clients if chosen so.</p>
+<p>Apart from the standard message structure (see Example C), some messages will contain additional information in order to
+aid clients in dealing with certain situations, such as the <strong>WARNING</strong> types. Some messages will only contain
+information that will confirm client settings (i.e. <strong>INFO</strong> types). All the metadata in the table below can be safely
+ignored by clients if chosen so.</p>
 
 <table><thead>
 <tr>
 <th>messageCode</th>
-<th>Message type</th>
+<th style="text-align: center">Message type</th>
 <th>Additional metadata</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>inactiveUserError</td>
-<td>ERROR</td>
+<td style="text-align: center">ERROR</td>
 <td>- userStatus: String type indicating the current status of the user used by the client.</td>
 </tr>
 <tr>
 <td>connectionCountExceeded</td>
-<td>ERROR</td>
+<td style="text-align: center">ERROR</td>
 <td>- maxConnectionCount: int type indicating the amount of connections for the API key that was sent in the init message</td>
 </tr>
 <tr>
 <td>connectionRefreshRequired</td>
-<td>ERROR</td>
+<td style="text-align: center">ERROR</td>
 <td>- maxDurationHours: int type indicating the maximum hours duration allowed for connections.</td>
 </tr>
 <tr>
 <td>defaultInputWarning</td>
-<td>WARNING</td>
+<td style="text-align: center">WARNING</td>
 <td>- sampleRate: int type indicating the default sample rate that will be used for your input<br/> - encoding: String type indicating the default encoding that will be used for your input</td>
 </tr>
 <tr>
 <td>defaultOutputWarning</td>
-<td>WARNING</td>
+<td style="text-align: center">WARNING</td>
 <td>- partials: boolean type indicating the default partial configuration for your output<br/>  - format: String type indicating the default transcription output format</td>
 </tr>
 <tr>
 <td>workerAcquisitionWarning</td>
-<td>WARNING</td>
+<td style="text-align: center">WARNING</td>
 <td>- current_counter: int type indicating the current attempt counter<br/>  - max_retries: int type indicating the maximum amount of retries until the client connection is terminated (once current_counter &gt; max_retries)<br/>  - current_timer: int type indicating when the next attempt will be made (in seconds)</td>
 </tr>
 <tr>
 <td>connectionLostWorkerAcquisitionWarning</td>
-<td>WARNING</td>
+<td style="text-align: center">WARNING</td>
 <td>Same metadata as the previous message, with the exception of the current_timer property; when a connection is lost, attempt #1 is made immediately</td>
 </tr>
 <tr>
 <td>inputConfigurationInfo</td>
-<td>INFO</td>
+<td style="text-align: center">INFO</td>
 <td>- sampleRate: int type indicating the sample rate received from the client in the INIT message<br/>  - encoding: String type indicating the encoding received from the client in the INIT message</td>
 </tr>
 </tbody></table>
