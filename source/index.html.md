@@ -2,10 +2,12 @@
 title: AmberScript Live Transcription API
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - javascript: NodeJS
+
+- javascript: NodeJS
 
 toc_footers:
-  - <a href='https://www.amberscript.com/en/speech-to-text-api'>Sign Up for our Transcription API</a>
+
+- <a href='https://www.amberscript.com/en/speech-to-text-api'>Sign Up for our Transcription API</a>
 
 search: true
 
@@ -14,7 +16,7 @@ code_clipboard: true
 
 # Introduction
 
-Welcome to AmberScript's Realt Time Transcription API!
+Welcome to AmberScript's Real Time Transcription API!
 
 This page will guide you through setting up a websocket connection to our Real Time Transcription endpoint.
 
@@ -45,11 +47,14 @@ This page will guide you through setting up a websocket connection to our Real T
 
 We will provide you with an `API_KEY` required to access our endpoints.
 
-Authentication is done via an "INIT" type message which must be sent as the first message once the socket connection is established. Anything else will result in errors and the incoming connection will be terminated.
+Authentication is done via an "INIT" type message which must be sent as the first message once the socket connection is
+established. Anything else will result in errors and the incoming connection will be terminated.
 
-In addition to the API key, you must also pass the [language](#language-codes), audio, and format configurations. If you omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
+In addition to the API key, you must also pass the [language](#language-codes), audio, and format configurations. If you
+omit the latter two, defaults will be chosen for you, which may result in a poor transcription quality.
 
-The audio configuration must contain the sample rate of your audio input together with the [encoding](#supported-encodings)
+The audio configuration must contain the sample rate of your audio input together with
+the [encoding](#supported-encodings)
 
 And example of the INIT message, using the default values looks like this:
 
@@ -93,6 +98,7 @@ function sendAudio(audioBuffer) {
     cleint.send(audioBuffer);
   }
 }
+
 // set up ping pong from your client to the service
 let interval = () =>
   setInterval(() => {
@@ -130,7 +136,7 @@ function onMessage(data) {
 }
 
 function exitHandler(options, exitCode) {
-  client.send(JSON.stringify({ messageType: "TRANSCRIPTION_FINISHED" }));
+  client.send(JSON.stringify({messageType: "TRANSCRIPTION_FINISHED"}));
 }
 ```
 
@@ -141,43 +147,56 @@ function exitHandler(options, exitCode) {
   "type": "<String; one of the types from the table on the left>",
   "message": "<String | Object<message: Array<Object>>>",
   "ready": "<boolean; not present on result type messages>",
-  "messageCode": "<String; not present on result type messages",
+  "messageCode": "<String; not present on result type messages"
 }
 ```
 
 <aside class="warning">
-    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to pings. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
+    Your client will be getting regular ping messages as defined in the <a href='https://datatracker.ietf.org/doc/html/rfc6455#page-37'>protocol specification</a>. Make sure that your client will respond with pongs, or your connection will be terminated. If you are using a browser client, your client will automatically reply to `ping` frames. If you are using a Websocket library for your back-end client, then please make sure that the library is compliant with the protocol.
 </aside>
 
-After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that your client waits until a message with the ready flag is set to true (see [short string message codes and ready indicators](#potential-errors-and-troubleshooting))
+After sending the initialisation message, you can then start sending the audio packets. However, it is recommended that
+your client waits until a message with the ready flag is set to true (
+see [short string message codes and ready indicators](#potential-errors-and-troubleshooting))
 
 > Example D: Info message sequence
 
 ```json
 {
-  "type":"Info",
-  "message":"Input configuration set to sample rate of 48000 for encoding s32le",
-  "ready":false,
-  "sampleRate":48000,
-  "encoding":"s32le",
-  "messageCode":"inputConfigurationInfo"
+  "type": "Info",
+  "message": "Input configuration set to sample rate of 48000 for encoding s32le",
+  "ready": false,
+  "sampleRate": 48000,
+  "encoding": "s32le",
+  "messageCode": "inputConfigurationInfo"
 }
 
+
+```
+
+_After input configuration confirmation is received:_
+
+```json
 {
-	"type": "INFO",
-	"message": "Recognition started",
-	"ready": true,
-	"messageCode": "recognitionStartedInfo"
+  "type": "INFO",
+  "message": "Recognition started",
+  "ready": true,
+  "messageCode": "recognitionStartedInfo"
 }
 ```
 
-If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect connection drops and reconnect.
+If you are not using a browser client, we recommend setting up a ping/pong mechanism so your client can detect
+connection drops and reconnect.
 
-Once you start sending audio data, you should expect to receive tanscriptions.
+Once you start sending audio data, you should expect to receive transcriptions.
 
-If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is retried.
+If something goes wrong during setup, or if the server loses its connection to one of our workers, you will receive
+warnings. This does not mean that your session is lost, but it is possible that you will have to wait until connections
+are reestablished. You will be informed of the current retry count, maximum retries, and the time until a connection is
+retried.
 
-Once your client is finished with streaming data, they should always send a "TRANSCRIPTION_FINISHED" message to our service. See example B, exitHandler function.
+Once your client is finished with streaming data, they should always send a "TRANSCRIPTION_FINISHED" message to our
+service. See example B, exitHandler function.
 
 ### Return message types
 
@@ -193,14 +212,16 @@ Once your client is finished with streaming data, they should always send a "TRA
   "messageCode": "workerAcquisitionWarning",
   "ready": false
 }
+```
 
+```json
 {
   "type": "WARNING",
-	"current_counter": 1,
-	"max_retries": 4,
-	"message": "The worker has disconnected. The connection will be retried 4 times, with current counter at 1",
-	"messageCode": "connectionLostWorkerAcquisitionWarning",
-	"ready": false
+  "current_counter": 1,
+  "max_retries": 4,
+  "message": "The worker has disconnected. The connection will be retried 4 times, with current counter at 1",
+  "messageCode": "connectionLostWorkerAcquisitionWarning",
+  "ready": false
 }
 ```
 
@@ -287,21 +308,26 @@ Once your client is finished with streaming data, they should always send a "TRA
 
 This service will output different types of messages:
 
-| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Error         | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.                                                                                                                                                                                               |
-| Info          | General information about audio configuration                                                                                                                                                                                                                                                                                                                                                                          |
-| Warning       | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.                                                                                                                                                                                                                                           |
-| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immmediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
-| FinalResult   | Final transcription for that segment of speech. Will not be recieving any more updates for this segment. Will contain alignment and confidence information                                                                                                                                                                                                                                                             |
+| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Error         | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.                                                                                                                                                                                              |
+| Info          | General information about audio configuration                                                                                                                                                                                                                                                                                                                                                                         |
+| Warning       | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.                                                                                                                                                                                                                                          |
+| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
+| FinalResult   | Final transcription for that segment of speech. Will not be receiving any more updates for this segment. Will contain alignment and confidence information                                                                                                                                                                                                                                                            |
 
-Clients should expect the format of the messages to follow the pattern visible in Example C (do note that some messages may or may not contain extra properties that clients may choose to ignore).
+Clients should expect the format of the messages to follow the pattern visible in Example C (do note that some messages
+may or may not contain extra properties that clients may choose to ignore).
 
-If you set the partials configured to `true`, then you will also receive partial transcriptions. You can see in the examples below that each message will have an id attached to it.
+If you set the partials configured to `true`, then you will also receive partial transcriptions. You can see in the
+examples below that each message will have an id attached to it.
 
-This can help you identify the sequence of the results. Each partial result will share the same id, until a final transcription is received. The final transcription will also share that id. Once you receive the final transcription, the id will reset and a new segment will start.
+This can help you identify the sequence of the results. Each partial result will share the same id, until a final
+transcription is received. The final transcription will also share that id. Once you receive the final transcription,
+the id will reset and a new segment will start.
 
-We also offer the possibility for clients to disable the punctuation. You can do this by passing the `enablePunctuation` flag with the value of `false`. By default, punctuation will be enabled.
+We also offer the possibility for clients to disable the punctuation. You can do this by passing the `enablePunctuation`
+flag with the value of `false`. By default, punctuation will be enabled.
 
 ## Language Codes
 
@@ -317,7 +343,7 @@ We also offer the possibility for clients to disable the punctuation. You can do
 ## Supported encodings
 
 | Format | Description                             |
-| ------ | --------------------------------------- |
+|--------|-----------------------------------------|
 | f32be  | PCM 32-bit floating-point big-endian    |
 | f32le  | PCM 32-bit floating-point little-endian |
 | s16be  | PCM signed 16-bit big-endian            |
@@ -335,38 +361,44 @@ We also offer the possibility for clients to disable the punctuation. You can do
 
 ## Potential errors and Troubleshooting
 
-| Error message                                                                                                                                                                            | Description                                                                                                                                                                                                                                    |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Something went wrong when setting up a connection to our services. Please try again later, or contact support.                                                                           | This error indicates that workers are not available right now. You should generally attempt new connections in 1-2 minutes after this error occurs. If the problem persists, please do contact us.                                             |
-| Your client seems to have been inactive for more than one minute. If this is a mistake, try again or contact support                                                                     | This error is very unlikely to occur. Your implementation might not be following the WebSocket protocol, and is not responding to ping control frames as detailed in the warning [here](#using-the-transcription-API).                         |
-| Something went wrong when processing your input. Please try again later, or contact support.                                                                                             | This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for techical support |
-| Your language configuration is missing. Please send your API key and language under the format {language: <langugage>, apiKey: &lt;your-api-key&gt;}. This connection will now be closed | Make sure your JSON message is stringified and that the language configuration uses the correct key                                                                                                                                            |
-| Your api key is missing. Please send your API key and language under the format {language: &lt;langugage&gt;, apiKey: &lt;your-api-key&gt;}. This connection will now be closed          | Make sure your JSON message is stringified and that the API key uses the correct key                                                                                                                                                           |
-| This language is not supported.                                                                                                                                                          | See [languages](#language-codes) for our supported languages. If you are interested in additional languages, please contact our support.                                                                                                       |
-| This API key is not recognised. Closing connection...                                                                                                                                    | Double check your API key. If there are no typos, then please contact support in order to get your API key again.                                                                                                                              |
-| Your status is &lt;different status than ACTIVE&gt;. Closing connection...                                                                                                               | Your account has been disabled. Contact support in order to clarify the issues with your accound                                                                                                                                               |
-| You must send your messages under a JSON format. This connection will now be closed                                                                                                      | Please stringify your JSON messages before sending them.                                                                                                                                                                                       |
-| Something went wrong                                                                                                                                                                     | This error message is the equivalent of a 500 status code. If the situation is not resolved after reattempting connections, then please contact our support.                                                                                   |
-| Something went wrong when transcribing your input.                                                                                                                                       | This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models' outputs. Please contact support if you ever encounter this message.                                         |
-| You client has been connected for more than {x**}h. This connection will be terminated.                                                                                                    | This error message indicates that your client needs to refresh the connection to our service, in the eventuality that your client has not finished streaming.                                         |
-| You are not allowed to use more than {x**} connections. This connection will be terminated.                                                                                                | This error message indicates that your client is attempting to open multiple connections to our service. If you want to bypass this limitation, please contact our support.                                           |
+| Error message                                                                                                                                                                            | Description                                                                                                                                                                                                                                     |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Something went wrong when setting up a connection to our services. Please try again later, or contact support.                                                                           | This error indicates that workers are not available right now. You should generally attempt new connections in 1-2 minutes after this error occurs. If the problem persists, please do contact us.                                              |
+| Your client seems to have been inactive for more than one minute. If this is a mistake, try again or contact support                                                                     | This error is very unlikely to occur. Your implementation might not be following the WebSocket protocol, and is not responding to ping control frames as detailed in the warning [here](#using-the-transcription-API).                          |
+| Something went wrong when processing your input. Please try again later, or contact support.                                                                                             | This error might be because of faulty input. Please evaluate your input configuration and the raw output of your microphone. If the issue cannot be resolved, please do communicate this information if you decide to ask for technical support |
+| Your language configuration is missing. Please send your API key and language under the format {language: <langugage>, apiKey: &lt;your-api-key&gt;}. This connection will now be closed | Make sure your JSON message is stringified and that the language configuration uses the correct key                                                                                                                                             |
+| Your api key is missing. Please send your API key and language under the format {language: &lt;language&gt;, apiKey: &lt;your-api-key&gt;}. This connection will now be closed           | Make sure your JSON message is stringified and that the API key uses the correct key                                                                                                                                                            |
+| This language is not supported.                                                                                                                                                          | See [languages](#language-codes) for our supported languages. If you are interested in additional languages, please contact our support.                                                                                                        |
+| This API key is not recognised. Closing connection...                                                                                                                                    | Double check your API key. If there are no typos, then please contact support in order to get your API key again.                                                                                                                               |
+| Your status is &lt;different status than ACTIVE&gt;. Closing connection...                                                                                                               | Your account has been disabled. Contact support in order to clarify the issues with your account                                                                                                                                                |
+| You must send your messages under a JSON format. This connection will now be closed                                                                                                      | Please stringify your JSON messages before sending them.                                                                                                                                                                                        |
+| Something went wrong                                                                                                                                                                     | This error message is the equivalent of a 500 status code. If the situation is not resolved after reattempting connections, then please contact our support.                                                                                    |
+| Something went wrong when transcribing your input.                                                                                                                                       | This error message is the equivalent of a 500 status code, indicating that something went wrong with the processing of our models' outputs. Please contact support if you ever encounter this message.                                          |
+| You client has been connected for more than {x**}h. This connection will be terminated.                                                                                                  | This error message indicates that your client needs to refresh the connection to our service, in the eventuality that your client has not finished streaming.                                                                                   |
+| You are not allowed to use more than {x**} connections. This connection will be terminated.                                                                                              | This error message indicates that your client is attempting to open multiple connections to our service. If you want to bypass this limitation, please contact our support.                                                                     |
 
-\* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h. This limit can change in future versions.
+\* As of the current version of the API, the maximum duration that a client is allowed to stream per connection is 2h.
+This limit can change in future versions.
 
-\** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can be bypassed on request. This limit can change in future versions.
-
+\** As of the current version of the API, the maximum connection count per API key is 1. This is a soft limit, and can
+be bypassed on request. This limit can change in future versions.
 
 ### Short string message codes and ready indicators
 
-Each client message will be accompanied by a short string message code in order to aid clients in identifying the information that each message contains. These message codes are only available for **INFO**, **WARNING**, and **ERROR** message types.
+Each client message will be accompanied by a short string message code in order to aid clients in identifying the
+information that each message contains. These message codes are only available for **INFO**, **WARNING**, and **ERROR**
+message types.
 
-**INFO**, **WARNING**, and **ERROR** message types will always hold a ready flag. However, there is only one message that will report if a worker is ready to start transcribing input. While it is recommended that you only start streaming when the ready flag is true, it is not mandatory. While not common, it is possible that there are delays between the worker acquisition and the start of the recognition process, which can lead to data loss.
+**INFO**, **WARNING**, and **ERROR** message types will always hold a ready flag. However, there is only one message
+that will report if a worker is ready to start transcribing input. While it is recommended that you only start streaming
+when the ready flag is true, it is not mandatory. While not common, it is possible that there are delays between the
+worker acquisition and the start of the recognition process, which can lead to data loss.
 
 | messageCode                            | Message type | Explanation                                                                                                                                                                                                                                                |
-| -------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| noWorkerAvailableError                 | ERROR        | This message code indicates that no worker was found, even after attempting reconnection                                                                                                                                                            |
-| connectionCountExceeded                 | ERROR        | This message code indicates that you cannot initiate any more connections to the service.                                                                                                                                                           |
-| connectionRefreshRequired                 | ERROR        | This message code indicates that the connection has exceeded the maximum allowed duration. If your client has not finished streaming, then you need to open a new connection to the service.                                                                                                                                                            |
+|----------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| noWorkerAvailableError                 | ERROR        | This message code indicates that no worker was found, even after attempting reconnection                                                                                                                                                                   |
+| connectionCountExceeded                | ERROR        | This message code indicates that you cannot initiate any more connections to the service.                                                                                                                                                                  |
+| connectionRefreshRequired              | ERROR        | This message code indicates that the connection has exceeded the maximum allowed duration. If your client has not finished streaming, then you need to open a new connection to the service.                                                               |
 | audioProcessingError                   | ERROR        | This message code indicates that a fatal error occurred when processing your audio input.                                                                                                                                                                  |
 | initialisationFailedError              | ERROR        | This message code indicates that a fatal error occurred when setting up the connection to our transcription workers.                                                                                                                                       |
 | inactiveClientError                    | ERROR        | This message code indicates that your client is not alive. If this message is received, make sure that your client is responding to pings coming from our service.                                                                                         |
@@ -385,25 +417,43 @@ Each client message will be accompanied by a short string message code in order 
 | connectionReestablishedInfo            | INFO         | This message code indicates that a new worker was acquired.                                                                                                                                                                                                |
 | recognitionStartedInfo\*\*             | INFO         | This message code indicates that the worker has started the recognition process.                                                                                                                                                                           |
 | inputConfigurationInfo                 | INFO         | This message code indicates that your INIT message was received. Your input configuration will be reported back to the client.                                                                                                                             |
+| transcriptionEndedInfo                 | INFO         | This message code indicates that the service will not accept ASR input anymore, and that it is safe for you to clean up the connection. <br/> <br/> Can be safely ignored.                                                                                 |
 
 \* This message can be safely ignored at v1.0, as the only supported format is "transcription".
 
 \** This is the only message that will have the ready flag set to **true**.
 
+### Numerical status codes
+
+| Status code | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|:-----------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|    1000     | Standard code defined in the protocol specification. <br/> <br/> Indicates a normal closure, meaning that the purpose for which the connection was established has been fulfilled. <br/> <br/> This status code is associated with the `transcriptionEndedInfo` short string `INFO` code and can be safely ignored.                                                                                                                                                                                    |
+|    1003     | Standard code defined in the protocol specification.<br/> <br/> Indicates that the service has received input that it cannot accept. <br/> <br/> Please verify your INIT message if the closure occurs with this code <br/> <br/> This status code is associated with the `messageFormatNotJSONError` short string `ERROR` code.                                                                                                                                                                       |
+|    1008     | Standard code defined in the protocol specification. <br/> <br/> Indicates that your client is not responsive to `pings` sent by our service. <br/> <br/> You should not be seeing this error code unless there is a fault in the way your client handles `pings` from our service. Please make sure that your client replies with a `pong` frame whenever a `ping` is received from our service. <br/> <br/> This status code is associated with the `inactiveClientError` short string `ERROR` code. |
+|    1011     | Standard code defined in the protocol specification. <br/> <br/> Indicates that an internal error has occurred in our service. <br/> Please try establishing a new connection to our service. If this provides no resolution, please reach out to our customer support.<br/> <br/> This status code is associated with the `audioProcessingError`, `initialisationFailedError`, `transcriptionError` short string `ERROR` codes.                                                                       |
+|    1013     | Standard code defined in the protocol specification. <br/> <br/> Indicates that our service is currently busy with creating more resources. Please try establishing a new connection. <br/> <br/> This status code is associated with the `noWorkerAvailableError` short string `ERROR` code.                                                                                                                                                                                                          |
+|    3000     | Standard code defined in the protocol specification. <br/> <br/> Indicates that you are not authorised to use our live ASR service. If this is a mistake, please reach out to our customer support. <br/> <br/> This status code is associated with the `missingOrInvalidKeyError`, `inactiveUserError` short string `ERROR` codes.                                                                                                                                                                    |
+|    4000     | This is a custom code, not defined in the protocol specification. <br/> <br/> Indicates the fact that you have exceeded the maximum duration of the connection. Please reestablish a new connection to our service if you have more input to transcribe. <br/> <br/> This status code is associated with the `connectionRefreshRequired` short string `ERROR` code.                                                                                                                                    |
+|    4001     | This is a custom code, not defined in the protocol specification. <br/> <br/> Indicates the fact that you are trying more connections than you are allowed. This restriction can be bypassed. Please reach out to our customer support and ask for the restriction to be removed for your `API key`.<br/> <br/> This status code is associated with the `connectionCountExceeded` short string `ERROR` code.                                                                                           | 
+|    4002     | This is a custom code, not defined in the protocol specification. <br/>  <br/> Indicates the fact that the language configuration is missing from the `INIT` message, or that the language you are requesting is not available. Please check your `INIT` message and try again. <br/> <br/> This status code is associated with the `languageNotAvailableError` and `noLanguagePresentError` short string `ERROR` codes.                                                                               |
+
 ## Extra message metadata
 
-Apart from the standard message structure (see Example C), some messages will contain additional information in order to aid clients in dealing with certain situations, such as the **WARNING** types. Some messages will only contain information that will confirm client settings (i.e **INFO** types). All the metadata in the table below can be safely ignored by clients if chosen so.
+Apart from the standard message structure (see Example C), some messages will contain additional information in order to
+aid clients in dealing with certain situations, such as the **WARNING** types. Some messages will only contain
+information that will confirm client settings (i.e. **INFO** types). All the metadata in the table below can be safely
+ignored by clients if chosen so.
 
-| messageCode                           	| Message type 	| Additional metadata                                                                                                                                                                                                                                                                                         	|
-|---------------------------------------	|--------------	|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| inactiveUserError                     	| ERROR        	|  - userStatus: String type indicating the current status of the user used by the client.                                                                                                                                                                                                                    	|
-| connectionCountExceeded                 | ERROR        	|  - maxConnectionCount: int type indicating the amount of connections for the API key that was sent in the init message                                                                                                                                                                                                                   	|
-| connectionRefreshRequired               | ERROR        	|  - maxDurationHours: int type indicating the maximum hours duration allowed for connections.                                                                                                                                                                                                                    	|
-| defaultInputWarning                   	| WARNING      	|  - sampleRate: int type indicating the default sample rate that will be used for your input<br/> - encoding: String type indicating the default encoding that will be used for your input                                                                                                                       	|
-| defaultOutputWarning                  	| WARNING      	|  - partials: boolean type indicating the default partial configuration for your output<br/>  - format: String type indicating the default transcription output format                                                                                                                                            	|
-| workerAcquisitionWarning              	| WARNING      	|  - current_counter: int type indicating the current attempt counter<br/>  - max_retries: int type indicating the maximum amount of retries until the client connection is terminated (once current_counter > max_retries)<br/>  - current_timer: int type indicating when the next attempt will be made (in seconds)  	|
-| connectionLostWorkerAcquisitionWarning 	| WARNING      	| Same metadata as the previous message, with the exception of the current_timer property; when a connection is lost, attempt #1 is made immediately                                                                                                                                                          	|
-| inputConfigurationInfo                	| INFO         	|  - sampleRate: int type indicating the sample rate received from the client in the INIT message<br/>  - encoding: String type indicating the encoding received from the client in the INIT message                                                                                                               	|
+| messageCode                            | Message type | Additional metadata                                                                                                                                                                                                                                                                                                 |
+|----------------------------------------|:------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| inactiveUserError                      |    ERROR     | - userStatus: String type indicating the current status of the user used by the client.                                                                                                                                                                                                                             |
+| connectionCountExceeded                |    ERROR     | - maxConnectionCount: int type indicating the amount of connections for the API key that was sent in the init message                                                                                                                                                                                               |
+| connectionRefreshRequired              |    ERROR     | - maxDurationHours: int type indicating the maximum hours duration allowed for connections.                                                                                                                                                                                                                         |
+| defaultInputWarning                    |   WARNING    | - sampleRate: int type indicating the default sample rate that will be used for your input<br/> - encoding: String type indicating the default encoding that will be used for your input                                                                                                                            |
+| defaultOutputWarning                   |   WARNING    | - partials: boolean type indicating the default partial configuration for your output<br/>  - format: String type indicating the default transcription output format                                                                                                                                                |
+| workerAcquisitionWarning               |   WARNING    | - current_counter: int type indicating the current attempt counter<br/>  - max_retries: int type indicating the maximum amount of retries until the client connection is terminated (once current_counter > max_retries)<br/>  - current_timer: int type indicating when the next attempt will be made (in seconds) |
+| connectionLostWorkerAcquisitionWarning |   WARNING    | Same metadata as the previous message, with the exception of the current_timer property; when a connection is lost, attempt #1 is made immediately                                                                                                                                                                  |
+| inputConfigurationInfo                 |     INFO     | - sampleRate: int type indicating the sample rate received from the client in the INIT message<br/>  - encoding: String type indicating the encoding received from the client in the INIT message                                                                                                                   |
 
 ## Support
 
