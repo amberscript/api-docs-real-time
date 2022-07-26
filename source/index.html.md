@@ -237,21 +237,40 @@ service. See example B, exitHandler function.
       {
         "words": [
           {
-            "word": "Testing"
+            "word": "Testing,",
+            "start": 0,
+            "end": 1.23,
+            "length": 0.6,
+            "confidence": 0
           },
           {
-            "word": "testing"
+            "word": "testing,",
+            "start": 2.67,
+            "end": 3.21,
+            "length": 0.54,
+            "confidence": 0
           },
           {
-            "word": "testing"
+            "word": "testing,",
+            "start": 3.21,
+            "end": 3.72,
+            "length": 0.51,
+            "confidence": 0
           },
           {
-            "word": "testing"
+            "word": "testing,",
+            "start": 3.72,
+            "end": 4.23,
+            "length": 0.51,
+            "confidence": 0
           }
-        ]
+        ],
+        "start": 0,
+        "end": 8.28,
+        "length": 8.28
       }
     ],
-    "transcript": "Testing testing testing testing"
+    "transcript": "Testing, testing, testing, testing, "
   }
 }
 ```
@@ -308,13 +327,13 @@ service. See example B, exitHandler function.
 
 This service will output different types of messages:
 
-| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
-|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Error         | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.                                                                                                                                                                                              |
-| Info          | General information about audio configuration                                                                                                                                                                                                                                                                                                                                                                         |
-| Warning       | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.                                                                                                                                                                                                                                          |
-| PartialResult | Partial transcription received from the workers. Partial transcripts will not be having alignment information, nor will it have any confidence information. However, you can expect to receive partial transcriptions almost immediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
-| FinalResult   | Final transcription for that segment of speech. Will not be receiving any more updates for this segment. Will contain alignment and confidence information                                                                                                                                                                                                                                                            |
+| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Error         | Standard auth, bad input errors along with connectivity issues, such as failure to connect to workers, or transcription errors. In the case of worker errors, clients will get the errors that were sent by the workers.                                                                                                                                                                                                       |
+| Info          | General information about audio configuration                                                                                                                                                                                                                                                                                                                                                                                  |
+| Warning       | Used when any disruptions of service occur (errors on the part of the workers/connection issues). You will also get warning if bad input was detected in your configuration.                                                                                                                                                                                                                                                   |
+| PartialResult | Partial transcription received from the workers. Partial transcripts will not have any confidence attributed to them, as they are not the final output of the model. However, you can expect to receive partial transcriptions almost immediately. Do be aware that these transcriptions are likely to change until a final transcription is received. You can use the unique identifier for a segment to track these changes. |
+| FinalResult   | Final transcription for that segment of speech. Will not be receiving any more updates for this segment. Will contain alignment and confidence information                                                                                                                                                                                                                                                                     |
 
 Clients should expect the format of the messages to follow the pattern visible in Example C (do note that some messages
 may or may not contain extra properties that clients may choose to ignore).
