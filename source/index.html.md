@@ -357,7 +357,7 @@ flag with the value of `false`. By default, punctuation will be enabled.
 |  French  |  fr  |
 |  German  |  de  |
 | Italian  |  it  |
-
+| Swedish  |  sv  |
 
 ## Supported encodings
 
